@@ -11,8 +11,8 @@ namespace CrmOrderManagement.Core.Entities
     public class Auditlog
     {
         public int Id { get; set; }
-
-        public int? User { get; set; }
+        public int? UserId { get; set; }
+        public User? User { get; set; }
 
         [Required]
         [MaxLength(100)]

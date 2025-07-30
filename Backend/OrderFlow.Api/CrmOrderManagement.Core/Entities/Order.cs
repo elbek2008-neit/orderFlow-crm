@@ -16,7 +16,7 @@ namespace CrmOrderManagement.Core.Entities
 
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; } = string.Empty;    
+        public string OrderNumber { get; set; } = string.Empty;
 
         public int ClientId { get; set; }
         public Client Client { get; set; } = null!;
