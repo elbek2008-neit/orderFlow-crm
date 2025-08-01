@@ -17,7 +17,7 @@ namespace CrmOrderManagement.Core.Entities
 
         [Required]
         [MaxLength(100)]
-        public string ConatctPerson { get; set; } = string.Empty;
+        public string ContactPerson { get; set; } = string.Empty;
 
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
@@ -30,16 +30,10 @@ namespace CrmOrderManagement.Core.Entities
 
         public bool IsActive { get; set; } = true;
 
-        public DateTime CreateAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime? UpdatedAt { get; set; }
 
         public ICollection<Order> Orders { get; set; } = new List<Order>();
-
-
-
-
-
-
     }
 }

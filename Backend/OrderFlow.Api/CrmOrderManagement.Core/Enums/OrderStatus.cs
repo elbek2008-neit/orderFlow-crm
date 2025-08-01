@@ -17,3 +17,4 @@ namespace CrmOrderManagement.Core.Enums
         Cancelled = 5
     }
 }
+    

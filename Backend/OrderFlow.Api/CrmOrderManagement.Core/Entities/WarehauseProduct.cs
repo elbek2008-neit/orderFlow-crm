@@ -16,6 +16,6 @@ namespace CrmOrderManagement.Core.Entities
 
         public int Quantity { get; set; }
 
-        public DateTime LastUpdate { get; set; } = DateTime.UtcNow;
+        public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
     }
 }

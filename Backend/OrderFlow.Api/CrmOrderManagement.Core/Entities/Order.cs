@@ -36,6 +36,6 @@ namespace CrmOrderManagement.Core.Entities
 
         public DateTime? UpdatedAt { get; set;}
 
-        public ICollection<OrderProduct> OrderProduct { get; set; } = new List<OrderProduct>();
+        public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
     }
 }

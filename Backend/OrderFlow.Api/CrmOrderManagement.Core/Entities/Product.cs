@@ -29,12 +29,12 @@ namespace CrmOrderManagement.Core.Entities
 
         public bool IsActive { get; set; } = true;
 
-        public DateTime CreateAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public DateTime? UpdateAt { get; set; }
 
         public ICollection<OrderProduct> OrderProducts { get; set; }
-        public ICollection<WarehauseProduct> WareauseProducts { get; set; }
+        public ICollection<WarehauseProduct> WarehauseProducts { get; set; }
 
 
 

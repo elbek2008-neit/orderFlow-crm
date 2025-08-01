@@ -31,6 +31,10 @@ namespace CrmOrderManagement.Core.Entities
 
         public bool IsActive { get; set; } = true;
 
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; }
+
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
         public ICollection<Order> Orders { get; set; } = new List<Order>();
             

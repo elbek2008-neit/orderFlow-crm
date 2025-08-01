@@ -1,41 +1,51 @@
+using CrmOrderManagement.Infrastructure.EF;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
+// Database
+builder.Services.AddDbContext<CrmDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen();
+
+// CORS
+builder.Services.AddCors(options =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        Title = "OrderFlow CRM API",
-        Version = "v1",
-        Description = "REST API для управления заказами",
-        Contact = new OpenApiContact
-        {
-            Name = "Your Name",
-            Email = "your.email@example.com"
-        }
+        policy.WithOrigins("http://localhost:3000", "http://localhost:8080")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
 var app = builder.Build();
 
+// Seed database
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<CrmDbContext>();
+    await DataSeeder.SeedAsync(context);
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "OrderFlow CRM API v1");
-        c.RoutePrefix = "swagger"; // Swagger будет доступен по /swagger
-    });
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 

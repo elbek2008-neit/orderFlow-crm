@@ -20,8 +20,8 @@ namespace CrmOrderManagement.Core.Entities
         [Column(TypeName = "decimal(18,2)")]
         public decimal UnitPrice { get; set; }
 
-        [Column(TypeName ="decimal(18,2)")]
-        public decimal TotalPtice => Quantity * UnitPrice;
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal TotalPrice { get; set; }
 
 
     }

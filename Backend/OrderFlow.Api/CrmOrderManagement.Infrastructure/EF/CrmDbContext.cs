@@ -13,13 +13,13 @@ namespace CrmOrderManagement.Infrastructure.EF
     {
         public CrmDbContext(DbContextOptions<CrmDbContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; } // В Базе Данных Таблица User 
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderProduct> OrdersProduct { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<Warehause> Warehauses { get; set; }
         public DbSet<WarehauseProduct> WarehauseProducts { get; set; }
         public DbSet<Auditlog> Auditlogs { get; set; }
@@ -60,7 +60,7 @@ namespace CrmOrderManagement.Infrastructure.EF
         {
             //Индексы для User
             modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email)
+                .HasIndex(u => u.Email) // Запрещяем создовать Клиентов с одинаковыми Email
                 .IsUnique()
                 .HasDatabaseName("IX_Users_Email");
 
@@ -107,7 +107,7 @@ namespace CrmOrderManagement.Infrastructure.EF
         private void ConfigureCascadeDeletes(ModelBuilder modelBuilder)
         {
             // Отключаем каскадное удаление для некоторых связей
-            modelBuilder.Entity<Order>()
+            modelBuilder.Entity<Order>() // Если удалить заказы Клиент не удалиться
                 .HasOne(o => o.Client)
                 .WithMany(c => c.Orders)
                 .OnDelete(DeleteBehavior.Restrict);

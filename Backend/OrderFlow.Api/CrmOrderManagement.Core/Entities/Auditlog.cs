@@ -22,7 +22,7 @@ namespace CrmOrderManagement.Core.Entities
 
         [Required]
         [MaxLength(50)]
-        public string Auction { get; set; } = string.Empty;
+        public string Action { get; set; } = string.Empty;
 
         public string? OldValues { get; set; } 
 
