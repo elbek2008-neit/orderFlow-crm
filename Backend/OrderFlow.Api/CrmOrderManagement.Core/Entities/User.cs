@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CrmOrderManagement.Core.Entities
 {
-    public class User
+    public class User 
     {
         public int Id { get; set; }
 
@@ -39,7 +40,5 @@ namespace CrmOrderManagement.Core.Entities
         public ICollection<Order> Orders { get; set; } = new List<Order>();
             
         public ICollection<Auditlog> AuditLogs { get; set; } = new List<Auditlog>();
-
-
     }
 }

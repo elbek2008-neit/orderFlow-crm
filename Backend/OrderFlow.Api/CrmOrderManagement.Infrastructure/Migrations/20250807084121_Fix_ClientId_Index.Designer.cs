@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrmOrderManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(CrmDbContext))]
-    [Migration("20250801054731_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250807084121_Fix_ClientId_Index")]
+    partial class Fix_ClientId_Index
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,7 +161,6 @@ namespace CrmOrderManagement.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId")
-                        .IsUnique()
                         .HasDatabaseName("IX_Orders_ClientId");
 
                     b.HasIndex("OrderNumber")
@@ -169,7 +168,6 @@ namespace CrmOrderManagement.Infrastructure.Migrations
                         .HasDatabaseName("IX_Orders_OrderNumber");
 
                     b.HasIndex("UserId")
-                        .IsUnique()
                         .HasDatabaseName("IX_Order_UserId");
 
                     b.ToTable("Orders", (string)null);
@@ -293,12 +291,15 @@ namespace CrmOrderManagement.Infrastructure.Migrations
             modelBuilder.Entity("CrmOrderManagement.Core.Entities.User", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 8, 1, 5, 47, 30, 520, DateTimeKind.Utc).AddTicks(881));
+                        .HasDefaultValue(new DateTime(2025, 8, 7, 8, 41, 21, 28, DateTimeKind.Utc).AddTicks(4333));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -394,7 +395,7 @@ namespace CrmOrderManagement.Infrastructure.Migrations
                         {
                             Id = 1,
                             Address = "123 Main St, City",
-                            CreatedAt = new DateTime(2025, 8, 1, 5, 47, 30, 521, DateTimeKind.Utc).AddTicks(5895),
+                            CreatedAt = new DateTime(2025, 8, 7, 8, 41, 21, 30, DateTimeKind.Utc).AddTicks(4182),
                             IsActive = true,
                             Name = "Main Warehouse"
                         },
@@ -402,7 +403,7 @@ namespace CrmOrderManagement.Infrastructure.Migrations
                         {
                             Id = 2,
                             Address = "456 Second St, City",
-                            CreatedAt = new DateTime(2025, 8, 1, 5, 47, 30, 521, DateTimeKind.Utc).AddTicks(5899),
+                            CreatedAt = new DateTime(2025, 8, 7, 8, 41, 21, 30, DateTimeKind.Utc).AddTicks(4185),
                             IsActive = true,
                             Name = "Secondary Warehouse"
                         });

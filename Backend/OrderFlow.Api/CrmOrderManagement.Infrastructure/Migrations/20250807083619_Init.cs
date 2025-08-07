@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CrmOrderManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -70,14 +70,15 @@ namespace CrmOrderManagement.Infrastructure.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2025, 8, 1, 5, 47, 30, 520, DateTimeKind.Utc).AddTicks(881)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2025, 8, 7, 8, 36, 18, 897, DateTimeKind.Utc).AddTicks(6453)),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -250,8 +251,8 @@ namespace CrmOrderManagement.Infrastructure.Migrations
                 columns: new[] { "Id", "Address", "CreatedAt", "IsActive", "Name" },
                 values: new object[,]
                 {
-                    { 1, "123 Main St, City", new DateTime(2025, 8, 1, 5, 47, 30, 521, DateTimeKind.Utc).AddTicks(5895), true, "Main Warehouse" },
-                    { 2, "456 Second St, City", new DateTime(2025, 8, 1, 5, 47, 30, 521, DateTimeKind.Utc).AddTicks(5899), true, "Secondary Warehouse" }
+                    { 1, "123 Main St, City", new DateTime(2025, 8, 7, 8, 36, 18, 899, DateTimeKind.Utc).AddTicks(4018), true, "Main Warehouse" },
+                    { 2, "456 Second St, City", new DateTime(2025, 8, 7, 8, 36, 18, 899, DateTimeKind.Utc).AddTicks(4022), true, "Secondary Warehouse" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -273,8 +274,7 @@ namespace CrmOrderManagement.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Order_UserId",
                 table: "Orders",
-                column: "UserId",
-                unique: true);
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_ClientId",

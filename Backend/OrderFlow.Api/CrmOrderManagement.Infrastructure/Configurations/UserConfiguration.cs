@@ -17,8 +17,8 @@ namespace CrmOrderManagement.Infrastructure.Configurations
 
             builder.HasKey(x => x.Id); //Указываем ключ
 
-            builder.Property(u => u.Id) 
-                .ValueGeneratedNever(); // Значение должно быть явно установленно перед сохранением 
+            builder.Property(u => u.Id)
+                .ValueGeneratedOnAdd(); // ← Изменяем на автогенерацию
 
             builder.Property(u => u.UserName) // Начинает настройку свойства UserName
                 .IsRequired()        // Колонка не может быть Null

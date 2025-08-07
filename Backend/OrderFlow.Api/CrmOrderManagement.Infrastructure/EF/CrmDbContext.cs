@@ -84,13 +84,12 @@ namespace CrmOrderManagement.Infrastructure.EF
             // Индексы для поиска заказов по клиенту
             modelBuilder.Entity<Order>()
                 .HasIndex(o => o.ClientId)
-                .IsUnique()
                 .HasDatabaseName("IX_Orders_ClientId");
 
             // Индекс для поиска заказов по менеджеру
             modelBuilder.Entity<Order>()
                 .HasIndex(o => o.UserId)
-                .IsUnique()
+
                 .HasDatabaseName("IX_Order_UserId");
 
             // Индексы для AuditLog
