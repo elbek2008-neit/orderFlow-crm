@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CrmOrderManagement.Services.Interfaces
+namespace CrmOrderManagement.Core.Interfaces
 {
     public interface IPasswordService
     {
