@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using CrmOrderManagement.Core.Entities;
 using CrmOrderManagement.Core.Enums;
+using CrmOrderManagement.Core.Interfaces;
 using System.Security.Cryptography;
 using System;
 using System.Collections.Generic;
@@ -20,27 +21,36 @@ using CrmOrderManagement.Core;
 
 namespace CrmOrderManagement.Infrastructure.Seeders
 {
-    public static class DataSeeder
+    public class DataSeeder
     {
-        public static async Task SeedAsync(CrmDbContext context)
+        private readonly CrmDbContext _context;
+        private readonly IPasswordService _passwordService;
+
+        public DataSeeder(CrmDbContext context, IPasswordService passwordService)
+        {
+            _context = context;
+            _passwordService = passwordService;
+        }
+
+        public async Task SeedAsync()
         {
             // Создаем базу данных если не существует
-            await context.Database.EnsureCreatedAsync();
+            await _context.Database.EnsureCreatedAsync();
 
             // Заполняем данные в правильном порядке
-            await SeedRolesAsync(context);
-            await SeedUsersAsync(context);
-            await SeedWarehousesAsync(context);
-            await SeedProductsAsync(context);
-            await SeedClientsAsync(context);
-            await SeedWarehouseProductsAsync(context);
-            await SeedOrdersAsync(context);
+            await SeedRolesAsync();
+            await SeedUsersAsync();
+            await SeedWarehousesAsync();
+            await SeedProductsAsync();
+            await SeedClientsAsync();
+            await SeedWarehouseProductsAsync();
+            await SeedOrdersAsync();
 
         }
 
-        private static async Task SeedRolesAsync(CrmDbContext context)
+        private async Task SeedRolesAsync()
         {
-            if (!context.Roles.Any())
+            if (!_context.Roles.Any())
             {
                 var roles = new[]
                 {
@@ -61,20 +71,20 @@ namespace CrmOrderManagement.Infrastructure.Seeders
                     }
                 };
 
-                context.Roles.AddRange(roles);
-                await context.SaveChangesAsync();
+                _context.Roles.AddRange(roles);
+                await _context.SaveChangesAsync();
             }
         }
 
-        private static async Task SeedUsersAsync(CrmDbContext context)
+        private async Task SeedUsersAsync()
         {
-            if (!context.Users.Any())
+            if (!_context.Users.Any())
             {
-                if (!context.Users.Any())
+                if (!_context.Users.Any())
                 {
-                    var adminRole = await context.Roles.FirstAsync(r => r.Name == "Admin");
-                    var managerRole = await context.Roles.FirstAsync(r => r.Name == "Manager");
-                    var operatorRole = await context.Roles.FirstAsync(r => r.Name == "Operator");
+                    var adminRole = await _context.Roles.FirstAsync(r => r.Name == "Admin");
+                    var managerRole = await _context.Roles.FirstAsync(r => r.Name == "Manager");
+                    var operatorRole = await _context.Roles.FirstAsync(r => r.Name == "Operator");
 
                     var users = new[]
                     {
@@ -82,7 +92,7 @@ namespace CrmOrderManagement.Infrastructure.Seeders
                         {
                             UserName = "admin",
                             Email = "admin@crm.com",
-                            PasswordHash = HashPassword("Admin123!"),
+                            PasswordHash = _passwordService.HashPassword("Admin123!"),
                             FirstName = "Администратор",
                             LastName = "Системы",
                             IsActive = true,
@@ -92,7 +102,7 @@ namespace CrmOrderManagement.Infrastructure.Seeders
                         {
                             UserName = "manager",
                             Email = "manager@crm.com",
-                            PasswordHash = HashPassword("Manager123!"),
+                            PasswordHash = _passwordService.HashPassword("Manager123!"),
                             FirstName = "Иван",
                             LastName = "Менеджеров",
                             IsActive = true,
@@ -102,16 +112,16 @@ namespace CrmOrderManagement.Infrastructure.Seeders
                         {
                             UserName = "operator",
                             Email = "operator@crm.com",
-                            PasswordHash = HashPassword("Operator123!"),
+                            PasswordHash = _passwordService.HashPassword("Operator123!"),
                             FirstName = "Мария",
                             LastName = "Операторова",
                             IsActive = true,
                             CreatedAt = DateTime.UtcNow
-                        }
+                        },
                     };
 
-                    context.Users.AddRange(users);
-                    await context.SaveChangesAsync();
+                    _context.Users.AddRange(users);
+                    await _context.SaveChangesAsync();
 
                     // Назначаем роли пользователям
                     var userRoles = new[]
@@ -121,15 +131,15 @@ namespace CrmOrderManagement.Infrastructure.Seeders
                         new UserRole { UserId = users[2].Id, RoleId = operatorRole.Id }
                     };
 
-                    context.UserRoles.AddRange(userRoles);
-                    await context.SaveChangesAsync();
+                    _context.UserRoles.AddRange(userRoles);
+                    await _context.SaveChangesAsync();
                 }
             }
         }
 
-        private static async Task SeedWarehousesAsync(CrmDbContext context)
+        private async Task SeedWarehousesAsync()
         {
-            if (!context.Warehauses.Any())
+            if (!_context.Warehauses.Any())
             {
                 var warehouses = new[]
                 {
@@ -156,14 +166,14 @@ namespace CrmOrderManagement.Infrastructure.Seeders
                     }
                 };
 
-                context.Warehauses.AddRange(warehouses);
-                await context.SaveChangesAsync();
+                _context.Warehauses.AddRange(warehouses);
+                await _context.SaveChangesAsync();
             }
         }
 
-        private static async Task SeedProductsAsync(CrmDbContext context)
+        private async Task SeedProductsAsync()
         {
-            if (!context.Products.Any())
+            if (!_context.Products.Any())
             {
                 var products = new[]
                 {
@@ -241,14 +251,14 @@ namespace CrmOrderManagement.Infrastructure.Seeders
                     }
                 };
 
-                context.Products.AddRange(products);
-                await context.SaveChangesAsync();
+                _context.Products.AddRange(products);
+                await _context.SaveChangesAsync();
             }
         }
 
-        private static async Task SeedClientsAsync(CrmDbContext context)
+        private async Task SeedClientsAsync()
         {
-            if (!context.Clients.Any())
+            if (!_context.Clients.Any())
             {
                 var clients = new[]
                 {
@@ -314,17 +324,17 @@ namespace CrmOrderManagement.Infrastructure.Seeders
                     }
                 };
 
-                context.Clients.AddRange(clients);
-                await context.SaveChangesAsync();
+                _context.Clients.AddRange(clients);
+                await _context.SaveChangesAsync();
             }
         }
 
-        private static async Task SeedWarehouseProductsAsync(CrmDbContext context)
+        private async Task SeedWarehouseProductsAsync()
         {
-            if (!context.WarehauseProducts.Any())
+            if (!_context.WarehauseProducts.Any())
             {
-                var warehouses = await context.Warehauses.ToListAsync();
-                var products = await context.Products.ToListAsync();
+                var warehouses = await _context.Warehauses.ToListAsync();
+                var products = await _context.Products.ToListAsync();
                 var random = new Random();
 
                 var warehauseProducts = new List<WarehauseProduct>();
@@ -345,18 +355,18 @@ namespace CrmOrderManagement.Infrastructure.Seeders
                     }
                 }
 
-                context.WarehauseProducts.AddRange(warehauseProducts);
-                await context.SaveChangesAsync();
+                _context.WarehauseProducts.AddRange(warehauseProducts);
+                await _context.SaveChangesAsync();
             }
         }
 
-        private static async Task SeedOrdersAsync(CrmDbContext context)
+        private async Task SeedOrdersAsync()
         {
-            if (!context.Orders.Any())
+            if (!_context.Orders.Any())
             {
-                var clients = await context.Clients.ToListAsync();
-                var users = await context.Users.ToListAsync();
-                var products = await context.Products.ToListAsync();
+                var clients = await _context.Clients.ToListAsync();
+                var users = await _context.Users.ToListAsync();
+                var products = await _context.Products.ToListAsync();
                 var random = new Random();
 
                 var orders = new List<Order>();
@@ -399,8 +409,8 @@ namespace CrmOrderManagement.Infrastructure.Seeders
                     orders.Add(order);
                 }
 
-                context.Orders.AddRange(orders);
-                await context.SaveChangesAsync();
+                _context.Orders.AddRange(orders);
+                await _context.SaveChangesAsync();
 
                 // Добавляем товары к заказам
                 foreach (var order in orders)
@@ -428,20 +438,20 @@ namespace CrmOrderManagement.Infrastructure.Seeders
                     order.TotalAmount = totalAmount;
                 }
 
-                context.OrderProducts.AddRange(orderProducts);
-                await context.SaveChangesAsync();
+                _context.OrderProducts.AddRange(orderProducts);
+                await _context.SaveChangesAsync();
 
                 // Логирование результатов
                 Console.WriteLine("✅ База данных успешно заполнена тестовыми данными!");
                 Console.WriteLine($"📊 Создано записей:");
-                Console.WriteLine($"   Пользователи: {context.Users.Count()}");
-                Console.WriteLine($"   Роли: {context.Roles.Count()}");
-                Console.WriteLine($"   Клиенты: {context.Clients.Count()}");
-                Console.WriteLine($"   Товары: {context.Products.Count()}");
-                Console.WriteLine($"   Склады: {context.Warehauses.Count()}");
-                Console.WriteLine($"   Заказы: {context.Orders.Count()}");
-                Console.WriteLine($"   Позиции заказов: {context.OrderProducts.Count()}");
-                Console.WriteLine($"   Остатки на складах: {context.WarehauseProducts.Count()}");
+                Console.WriteLine($"   Пользователи: {_context.Users.Count()}");
+                Console.WriteLine($"   Роли: {_context.Roles.Count()}");
+                Console.WriteLine($"   Клиенты: {_context.Clients.Count()}");
+                Console.WriteLine($"   Товары: {_context.Products.Count()}");
+                Console.WriteLine($"   Склады: {_context.Warehauses.Count()}");
+                Console.WriteLine($"   Заказы: {_context.Orders.Count()}");
+                Console.WriteLine($"   Позиции заказов: {_context.OrderProducts.Count()}");
+                Console.WriteLine($"   Остатки на складах: {_context.WarehauseProducts.Count()}");
             }
         }
 
@@ -460,15 +470,6 @@ namespace CrmOrderManagement.Infrastructure.Seeders
 
             var random = new Random();
             return notes[random.Next(notes.Length)];
-        }
-
-        private static string HashPassword(string password)
-        {
-            // Простое хеширование для демонстрации
-            // В реальном проекте лучше использовать более безопасный метод
-            using var sha256 = SHA256.Create();
-            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password + "CrmSalt2024"));
-            return Convert.ToBase64String(hashedBytes);
         }
     }
 
