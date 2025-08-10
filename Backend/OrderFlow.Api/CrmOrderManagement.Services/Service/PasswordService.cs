@@ -48,6 +48,13 @@ namespace CrmOrderManagement.Services.Service
                 // Декодируем сохраненный хеш
                 var hashBytes = Convert.FromBase64String(hashPassword);
 
+
+                if (hashBytes.Length != SaltSize + HashSize)
+                {
+                    // Некорректный формат хеша — выбрасываем ошибку или возвращаем false
+                    throw new ArgumentException("Invalid hash length");
+                }
+
                 // Извлекаем Соль
                 var salt = new Byte[SaltSize];
                 Array.Copy(hashBytes, 0, salt, 0, SaltSize);
