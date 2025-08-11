@@ -3,6 +3,7 @@ using CrmOrderManagement.Infrastructure.EF;
 using CrmOrderManagement.Infrastructure.Seeders;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using CrmOrderManagement.Core.Enums;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
@@ -100,17 +101,14 @@ builder.Services.AddAuthentication(options =>
 // Добавляем авторизацию
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("ManagerOnly", policy => policy.RequireRole("Manager"));
-    options.AddPolicy("OperatorOnly", policy => policy.RequireRole("Operator"));
-    options.AddPolicy("ManagerOrAdmin", policy => policy.RequireRole("Manager", "Admin"));
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole(Roles.Admin));
+    options.AddPolicy("ManagerOnly", policy => policy.RequireRole(Roles.Manager));
+    options.AddPolicy("OperatorOnly", policy => policy.RequireRole(Roles.Operator));
+    options.AddPolicy("ManagerOrAdmin", policy => policy.RequireRole(Roles.Manager, Roles.Admin));
 });
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Настройка Swagger с поддержкой JWT
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
