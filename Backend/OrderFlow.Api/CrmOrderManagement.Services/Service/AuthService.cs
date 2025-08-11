@@ -34,10 +34,10 @@ namespace CrmOrderManagement.Services.Service
                  .ThenInclude(ur => ur.Role)
                  .FirstOrDefaultAsync(u =>
                      u.UserName == dto.Username);
-                     
+
 
             if (user == null || !_passwordService.VerifyPassword(dto.Password, user.PasswordHash))
-                throw new UnauthorizedAccessException("Invalid username or password");
+                return null;
 
             var claims = new UserClaims
             {
