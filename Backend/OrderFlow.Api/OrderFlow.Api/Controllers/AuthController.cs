@@ -25,13 +25,14 @@ namespace OrderFlow.Api.Controllers
         }
 
         [HttpPost("register")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
             return Ok(await _authService.RegisterAsync(dto));
         }
 
         [HttpPost("refresh")]
+        [Authorize]
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest dto)
         {
             return Ok(await _authService.RefreshTokenAsync(dto));
@@ -41,17 +42,8 @@ namespace OrderFlow.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Me()
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("sub");
-            if (userIdClaim == null)
-                return Unauthorized("User id claim not found");
-
-            if (!int.TryParse(userIdClaim.Value, out var userId))
-                return Unauthorized("User id claim invalid");
-
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var userDto = await _authService.GetCurrentUserAsync(userId);
-            if (userDto == null)
-                return NotFound("User not found");
-
             return Ok(userDto);
         }
     }
