@@ -1,4 +1,5 @@
 ﻿using CrmOrderManagement.Core.Dtos;
+using CrmOrderManagement.Core.Entities;
 using CrmOrderManagement.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,14 +33,14 @@ namespace OrderFlow.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateClientDto dto)
+        public async Task<IActionResult> Create(Client dto)
         { 
             var client = await _clientService.CreateClientAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = client.Id }, client);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UpdateClientDto dto)
+        public async Task<IActionResult> Update(int id, Client dto)
         {
             var updated = await _clientService.UpdateClientAsync(id, dto);
             return Ok(updated);
