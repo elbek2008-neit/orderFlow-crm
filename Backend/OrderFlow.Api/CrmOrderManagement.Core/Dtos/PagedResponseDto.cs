@@ -8,8 +8,8 @@ namespace CrmOrderManagement.Core.Dtos
 {
     public class PagedResponseDto<T>
     {
-        public IEnumerable<T> Data { get; set; }
-        public MetaDataDto Meta { get; set; }
+        public IEnumerable<T> Data { get; set; } = Enumerable.Empty<T>();
+        public MetaDataDto Meta { get; set; } = new MetaDataDto();
     }
 
     public class MetaDataDto

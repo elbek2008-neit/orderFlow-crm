@@ -26,34 +26,36 @@ namespace CrmOrderManagement.Services.Service
             _dbContext = dbContext;
         }
 
-        public async Task<Client?> GetClientByIdAsync(int id) 
+        public async Task<ClientDto?> GetClientByIdAsync(int id) 
         {
             var client = await _unitOfWork.Clients.GetByIdAsync(id);
-            return client;
+            return _mapper.Map<ClientDto>(client);
         }
 
-        public async Task<Client?> GetClientByCompanyNameAsync(string companyName) 
+        public async Task<ClientDto?> GetClientByCompanyNameAsync(string companyName) 
         { 
             var client =  await _dbContext.Clients.FirstOrDefaultAsync(c => c.CompanyName == companyName);
-            return client;
+            return _mapper.Map<ClientDto>(client);
         }
 
-        public async Task<Client> CreateClientAsync(Client client) 
+        public async Task<ClientDto> CreateClientAsync(CreateClientDto createClientDto) 
         {
+            var client = _mapper.Map<Client>(createClientDto);
             _unitOfWork.Clients.Add(client);
             await _unitOfWork.SaveChangesAsync();
-            return client;
+            return _mapper.Map<ClientDto>(client);
         }
 
-        public async Task<Client> UpdateClientAsync(int id, Client updateClientDto) 
+        public async Task<ClientDto> UpdateClientAsync(int id, UpdateClientDto updateClientDto) 
         {
             var client = await _unitOfWork.Clients.GetByIdAsync(id);
-            if (client == null) throw new Exception("User not found");
+            if (client == null) throw new Exception("Client not found");
 
+            _mapper.Map(updateClientDto, client);
             _unitOfWork.Clients.Update(client);
             await _unitOfWork.SaveChangesAsync();
 
-            return client;
+            return _mapper.Map<ClientDto>(client);
         }
 
         public async Task<bool> DeleteClientByIdtAsync(int id) 
@@ -65,10 +67,10 @@ namespace CrmOrderManagement.Services.Service
             return await _unitOfWork.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<Client>> GetAllClientsAsync() 
+        public async Task<IEnumerable<ClientDto>> GetAllClientsAsync() 
         {
             var clients = await _unitOfWork.Clients.GetAllAsync();
-            return clients;
+            return _mapper.Map<IEnumerable<ClientDto>>(clients);
         }
 
     }

@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CrmOrderManagement.Core.Entities;
+using CrmOrderManagement.Core.Dtos;
 
 namespace CrmOrderManagement.Core.Interfaces
 {
     public interface IClientService
     {
-        Task<Client?> GetClientByIdAsync(int id);
-        Task<Client?> GetClientByCompanyNameAsync(string companyName);
-        Task<Client> CreateClientAsync(Client client);
-        Task<Client> UpdateClientAsync(int id, Client client);
+        Task<ClientDto?> GetClientByIdAsync(int id);
+        Task<ClientDto?> GetClientByCompanyNameAsync(string companyName);
+        Task<ClientDto> CreateClientAsync(CreateClientDto client);
+        Task<ClientDto> UpdateClientAsync(int id, UpdateClientDto client);
         Task<bool> DeleteClientByIdtAsync(int id);
-        Task<IEnumerable<Client>> GetAllClientsAsync();
+        Task<IEnumerable<ClientDto>> GetAllClientsAsync();
     }
 }

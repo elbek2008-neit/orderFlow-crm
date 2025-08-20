@@ -16,6 +16,8 @@ namespace CrmOrderManagement.Services.Mappings
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Roles,
                     opt => opt.MapFrom(src => src.UserRoles.Select(ur => ur.Role.Name)));
+            CreateMap<CreateUserDto, User>();
+            CreateMap<UpdateUserDto, User>();
         }
     }
 }

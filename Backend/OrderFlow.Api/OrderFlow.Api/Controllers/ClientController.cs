@@ -33,14 +33,14 @@ namespace OrderFlow.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Client dto)
+        public async Task<IActionResult> Create(CreateClientDto dto)
         { 
             var client = await _clientService.CreateClientAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = client.Id }, client);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Client dto)
+        public async Task<IActionResult> Update(int id, UpdateClientDto dto)
         {
             var updated = await _clientService.UpdateClientAsync(id, dto);
             return Ok(updated);

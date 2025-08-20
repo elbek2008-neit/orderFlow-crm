@@ -10,10 +10,10 @@ namespace CrmOrderManagement.Core.Interfaces
 {
     public interface IProductService
     {
-        Task<Product?> GetProductByIdAsync(int id);
-        Task<Product> CreateProductAsync(Product createProductDto);
-        Task<Product> UpdateProductAsync(Product updateProductDto);
-        Task<bool> DeleteProductById(int id);
-        Task<PagedResponseDto<Product>> GetProductsAsync(string search, int page, int limit);
+        Task<ProductDto?> GetProductByIdAsync(int id);
+        Task<ProductDto> CreateProductAsync(CreateProductDto createProductDto);
+        Task<ProductDto> UpdateProductAsync(int id, UpdateProductDto updateProductDto);
+        Task<bool> DeleteProductByIdAsync(int id);
+        Task<PagedResponseDto<ProductDto>> GetProductsAsync(string search, int page, int limit);
     }
 }
