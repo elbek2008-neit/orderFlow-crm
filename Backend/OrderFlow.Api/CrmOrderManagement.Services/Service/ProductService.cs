@@ -1,9 +1,12 @@
 ﻿using CrmOrderManagement.Core.Dtos;
 using CrmOrderManagement.Core.Entities;
+using CrmOrderManagement.Core.Entities;
 using CrmOrderManagement.Core.Interfaces;
 using CrmOrderManagement.Infrastructure.Repositories.IRepositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using CrmOrderManagement.Infrastructure.EF;
+using CrmOrderManagement.Infrastructure.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +25,12 @@ namespace CrmOrderManagement.Services.Service
             _mapper = mapper;
         }
 
-        public async Task<ProductDto?> GetProductByIdAsync(int id) 
+        public async Task<ProductDto?> GetProductByIdAsync(int id)
         {
             var product = await _unitOfWork.Products.GetByIdAsync(id);
             return _mapper.Map<ProductDto>(product);
         }
-        public async Task<ProductDto> CreateProductAsync(CreateProductDto createProductDto) 
+        public async Task<ProductDto> CreateProductAsync(CreateProductDto createProductDto)
         {
             var product = _mapper.Map<Product>(createProductDto);
             _unitOfWork.Products.Add(product);
@@ -48,7 +51,7 @@ namespace CrmOrderManagement.Services.Service
 
             return _mapper.Map<ProductDto>(product);
         }
-        public async Task<bool> DeleteProductByIdAsync(int id) 
+        public async Task<bool> DeleteProductByIdAsync(int id)
         {
             var product = await _unitOfWork.Products.GetByIdAsync(id);
             if (product == null) throw new Exception("Product not found");
@@ -61,32 +64,25 @@ namespace CrmOrderManagement.Services.Service
             if (page <= 0) page = 1;
             if (limit <= 0) limit = 10;
 
-            // Базовый запрос
-            var query = _unitOfWork.Products.GetAll(); // IQueryable<Product>
+            var query = _unitOfWork.Products.GetAll(); 
 
-            // Фильтрация по поиску
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(p => p.Name.Contains(search) || p.Description.Contains(search));
             }
 
-            // Подсчет общего количества
             var total = await query.CountAsync();
 
-            // Пагинация
             var products = await query
-                .OrderBy(p => p.Name) // Сортировка по имени (можно кастомизировать)
+                .OrderBy(p => p.Name) 
                 .Skip((page - 1) * limit)
                 .Take(limit)
                 .ToListAsync();
 
-            // Маппинг
             var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
 
-            // Рассчет общего количества страниц
             var totalPages = (int)Math.Ceiling(total / (double)limit);
 
-            // Формируем ответ
             return new PagedResponseDto<ProductDto>
             {
                 Data = productDtos,
