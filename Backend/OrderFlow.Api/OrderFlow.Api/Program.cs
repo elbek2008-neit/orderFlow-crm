@@ -12,6 +12,8 @@ using CrmOrderManagement.Core.Interfaces;
 using CrmOrderManagement.Services.Service;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using CrmOrderManagement.Infrastructure.Repositories.IRepositories;
+using CrmOrderManagement.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,12 +29,16 @@ builder.Services.AddDbContext<CrmDbContext>(options =>
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
-
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Регистрация сервисов
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 // CORS
 builder.Services.AddCors(options =>

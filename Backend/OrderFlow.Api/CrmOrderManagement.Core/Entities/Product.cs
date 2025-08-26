@@ -36,7 +36,5 @@ namespace CrmOrderManagement.Core.Entities
         public ICollection<OrderProduct> OrderProducts { get; set; }
         public ICollection<WarehauseProduct> WarehauseProducts { get; set; }
 
-
-
     }
 }
